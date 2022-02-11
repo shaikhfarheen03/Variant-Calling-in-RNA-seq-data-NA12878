@@ -16,8 +16,20 @@ The fasta file, .fai file, .dict, dbsnp file, known indel sites were downloaded.
 GTF file was downloaded from Gencode: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gtf.gz
 
  
- # Creating a AWS account
- Go to AWS website and create an account. 
+ # SETUP A LINUX MACHINE
+ ## Sign in to AWS Console (direct sign-in)
+![Screen Shot 2022-02-11 at 3 29 07 PM](https://user-images.githubusercontent.com/26681884/153665861-29e792e4-403d-438f-94db-655e9132a0f0.png)
+
+## Launch the EC2 instance
+Search for EC2 in the AWS management console bar
+![Screen Shot 2022-02-11 at 3 33 58 PM](https://user-images.githubusercontent.com/26681884/153666386-a27e5984-1c3a-4963-a535-a040f803e062.png)
+
+Choose EC2 to open the EC2 Dashboard.
+
+ 
+ 
+ 
+ 
  After creating an account generate a .PEM key by going to 
  The key will be downloaded on your local computer
  
