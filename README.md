@@ -16,12 +16,16 @@ The fasta file, .fai file, .dict, dbsnp file, known indel sites were downloaded.
 GTF file was downloaded from Gencode: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gtf.gz
 
  
- # Moving analysis to AWS
- ## Starting a AWS EC2 instance
+ # Creating a AWS account
  Go to AWS website and create an account. 
  After creating an account generate a .PEM key by going to 
- The key will be downloaded on your lcoal computer
+ The key will be downloaded on your local computer
  
+ ## Starting a AWS EC2 instance
+ Start an EC2 instance and add enough memory to the instance. 
+ 
+ ## Logging in to the instance 
+ Go to terminal and type 
  
  
  ## Installing conda on AWS
