@@ -1,57 +1,80 @@
 # Variant Calling in NA12878 RNA data on AWS
 Variant Calling in NA12878 was performed using the [GATK best practices workflow](https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-).
 
-# Fastq files and reference genome
-Fastq files were obtained from the following link https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR5665260 
-To download the files I installed SRAtoolkit on the server and used the commmand fasterq dump command: 
-```bash
-fasterq-dump SRR5665260
-```
-
-fasterq-dump also takes --threads and --progress as parameters. 
-
-Reference genome was downloaded on the local computer from the following link: https://console.cloud.google.com/storage/browser/genomics-public-data/resources/broad/hg38/v0;tab=objects?prefix=&forceOnObjectsSortingFiltering=false 
-The fasta file, .fai file, .dict, dbsnp file, known indel sites were downloaded.
-
-GTF file was downloaded from Gencode: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gtf.gz
-
- 
- # SETUP A LINUX MACHINE
+# SETUP A LINUX MACHINE
  ## Sign in to AWS Console (direct sign-in)
-![Screen Shot 2022-02-11 at 3 29 07 PM](https://user-images.githubusercontent.com/26681884/153665861-29e792e4-403d-438f-94db-655e9132a0f0.png)
 
-## Launch the EC2 instance
+## Launch the EC2 dashboard
 Search for EC2 in the AWS management console bar
-![Screen Shot 2022-02-11 at 3 33 58 PM](https://user-images.githubusercontent.com/26681884/153666386-a27e5984-1c3a-4963-a535-a040f803e062.png)
-
 Choose EC2 to open the EC2 Dashboard.
 
+##Create a new key pair
+In the left navigation pane, click on Key Pairs. This will display a page to manage your SSH key pairs.
+
+On the Key Pairs page click the Create Key Pair button at the top of the browser window.
+
+In the resulting pop up window, provide a key pair name of your choosing and select .pem
+Click on Create key pair.
+The key pair you created should automatically download to your system. Follow any browser instructions to save the file to the default download location.
+You will see a message appear at the top of the screen that says Successfully created key pair. You will see the key pair you created listed.
+
+##Launch an EC2 instance
+Return to the AWS Management Console and open the Amazon EC2 Dashboard.
+Click Launch instance, then click Launch instance again from the drop down menu.
+Next in the Step 1 page, select the Ubuntu Server 20.04 LTS (HVM), SSD Volume Type - ami-04505e74c0741db8d (64-bit x86) / ami-0b49a4a6e8e22fa16 (64-bit Arm) and click on the Select.
+In the Step 2 page, choose an Instance type, select the c5.2xlarge instance from the list and click Next: Configure Instance Details.
+
+On Step 3 page, Configure Instance Details - leave the default settings. Note that the Subnet field can be configured to launch the instance in a specific Availability Zone; while we are keeping the default for this workshop, this gives you control over the location of your machine. Click the Next: Add Storage button in the bottom right corner.
+
+On the Step 4 page, you have the ability to modify or add storage and disk drives to the instance. For this lab, we will simply accept the storage defaults. Take note that the default setting for Delete on Termination is affirmative. This indicates that if the machine is terminated, the root volume associated with the instance will be deleted. You need to uncheck this if you plan to store data on the root volume which you would want to access later. 
+When ready, click Next: Configure Security Group.
+
+On Step 6 page, you will be prompted to create a new security group, which will be your firewall rules. Provide a name for your new security group.
+Confirm an existing SSH rule exists which allows TCP port 22. To accept connections from Anywhere select the drop-down box under the Source column and select Anywhere which will correspond to 0.0.0.0/0, ::/0.
+
+Click the Review and Launch button.
+
+Review your configuration and choices, and then click Launch.
+
+Select the key pair that you created in the beginning of this lab from the drop-down and check the I acknowledge checkbox. Then click the Launch Instances button.
+
+Your instance will now start, which may take a moment. You will be shown the Launch Status page with the message that your instances are now launching
+
+On the lower right of the page click on View Instances to view the list of EC2 instances. Click on your instance. It will go through an initialization process. Once your instance has launched, you will see your Linux server as well as the Availability Zone the instance is in, and the publicly routable DNS name.
+
+##SSH into EC2 instance
+Connecting using SSH on Linux & MacOS and OpenSSH on Windows
+In a terminal window, use the ssh command to connect to the instance. Specify the path and file name of the private key (.pem), the user name for your instance, and the public DNS name or IP Address of your instance.
+
+ssh -i /path/my-key-pair.pem ec2-user@<ip-address>
  
+ You see a response like the following
  
+ The authenticity of host 'ec2-198-51-100-1.compute-1.amazonaws.com (198-51-100-1)' can't be established.
+ECDSA key fingerprint is l4UB/neBad9tvkgJf1QZWxheQmR59WgrgzEimCG6kZY.
+Are you sure you want to continue connecting (yes/no)?
  
- 
- After creating an account generate a .PEM key by going to 
- The key will be downloaded on your local computer
- 
- ## Starting a AWS EC2 instance
- Start an EC2 instance and add enough memory to the instance. 
- 
- ## Logging in to the instance 
- Go to terminal and type 
- 
+ Enter Yes
+You will now be logged into the Instance.
  
  ## Installing conda on AWS
+ Using conda to install bioinformatics tools takes care of all dependencies. Users can create different enviroments and install different versions of tools in different environments.
+ 
  ## Setting up a conda environment on AWS
+ Inorder to set up conda on AWS, use the following code.
+
 ```bash 
-conda create --name=rnaAlign python=3
-conda activate rnaAlign
-conda config --add channels bioconda
+ sudo bash #Give admin rights
+ cd / #Go to the root directory
+conda create --name=rnaAlign python=3 #This creates a new conda environment with python 3
+conda activate rnaAlign #Activate the environment
+conda config --add channels bioconda #Add channels
 conda config --add channels conda-forge
 ```
 
  ## Installing common bioinformtic tools
 ```bash
-conda install samtools
+conda install samtools 
 conda install gatk
 conda install fastp
 conda install STAR
@@ -59,7 +82,7 @@ conda install
 ```
 
  ## Expanding partition on disk
- 
+In case you would like to expand the partition on the disk use the follwing code.
 ```bash
 growpart /dev/nvme0n1 1
 resize2fs /dev/nvme0n1p1
@@ -67,7 +90,26 @@ resize2fs /dev/nvme0n1p1
 
  ## Transferring files from local computer to AWS
  
+
+ 
+ # Fastq files and reference genome
+Fastq files were obtained from the following link https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR5665260 
+To download the files I installed SRAtoolkit on the server and used the commmand fasterq dump command: 
 ```bash
+fasterq-dump SRR5665260
+```
+
+fasterq-dump also takes --threads and --progress as parameters. 
+ 
+ 
+
+Reference genome was downloaded on the local computer from the following link: https://console.cloud.google.com/storage/browser/genomics-public-data/resources/broad/hg38/v0;tab=objects?prefix=&forceOnObjectsSortingFiltering=false 
+The fasta file, .fai file, .dict, dbsnp file, known indel sites were downloaded.
+
+GTF file was downloaded from Gencode: https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/gencode.v39.annotation.gtf.gz
+ 
+ 
+ ```bash
 scp -i /Users/farheen/Downloads/RNAalign_farheen.pem /Users/farheen/RNA_Alignment_Jan22/genome/resources_broad_hg38_v0_Homo_sapiens_assembly38.fasta ubuntu@ec2-3-86-97-53.compute-1.amazonaws.com:/home/ubuntu/
  ```
  
@@ -75,13 +117,6 @@ scp -i /Users/farheen/Downloads/RNAalign_farheen.pem /Users/farheen/RNA_Alignmen
  
  
  
- ## Stopping the instance 
-You can either go to the Amazon AWS website and search for instance. Select the instance that is running and select Stop instance. This will disconnect you from the instance. 
- 
- 
- ## Creating a AMI of the instance
- ## Terminating the instance 
- ## Using the AMI to generate an instance 
  # Workflow
  ### Running fastp for qaulity and to trim adapters (You could also use fastqc to get quality and then clean the fastq using fastp)
  - Input SRR5665260_1.fastq, SRR5665260_2.fastq
@@ -144,4 +179,11 @@ nohup gatk ApplyBQSR --add-output-sam-program-record -R /workspace/RNAseq_data/r
  
  
 
+ ## Stopping the instance 
+You can either go to the Amazon AWS website and search for instance. Select the instance that is running and select Stop instance. This will disconnect you from the instance. 
+ 
+ 
+ ## Creating a AMI of the instance
+ ## Terminating the instance 
+ ## Using the AMI to generate an instance 
 
