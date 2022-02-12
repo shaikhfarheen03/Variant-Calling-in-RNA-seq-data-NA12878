@@ -1,14 +1,14 @@
 # Variant Calling in NA12878 RNA data on AWS
 Variant Calling in NA12878 was performed using the [GATK best practices workflow](https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-).
 
-# SETUP A LINUX MACHINE
+## SETUP A LINUX MACHINE
  ## Sign in to AWS Console (direct sign-in)
 
-## Launch the EC2 dashboard
+### Launch the EC2 dashboard
 Search for EC2 in the AWS management console bar
 Choose EC2 to open the EC2 Dashboard.
 
-##Create a new key pair
+### Create a new key pair
 In the left navigation pane, click on Key Pairs. This will display a page to manage your SSH key pairs.
 
 On the Key Pairs page click the Create Key Pair button at the top of the browser window.
