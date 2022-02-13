@@ -19,12 +19,17 @@ scp -i /Users/farheen/Downloads/RNAalign_farheen.pem /Users/farheen/RNA_Alignmen
  ```
  
  # Workflow
+ ![Workflow](https://user-images.githubusercontent.com/26681884/153778754-a7d5fcd5-69f2-4ac5-8fa2-b0cc76198775.jpg) 
+ [RNA variant calling steps and parameters - Sheet1.pdf](https://github.com/shaikhfarheen03/Varaint-Calling-in-RNA-seq-data-NA12878-/files/8056851/RNA.variant.calling.steps.and.parameters.-.Sheet1.pdf)
+
  ### Running fastp for qaulity and to trim adapters (You could also use fastqc to get quality and then clean the fastq using fastp)
- - Input SRR5665260_1.fastq, SRR5665260_2.fastq
+ - Input 
+>SRR5665260_1.fastq, SRR5665260_2.fastq
 ```bash 
 fastp -i SRR5665260_1.fastq -I SRR5665260_2.fastq -o SRR5665260_1.fastp.fastq -O SRR5665260_2.fastp.fastq --detect_adapter_for_pe 
 ```
-- Output SRR5665260_1.fastp.fastq, SRR5665260_2.fastp.fastq, fastp.html, fastp.json
+- Output
+>SRR5665260_1.fastp.fastq, SRR5665260_2.fastp.fastq, fastp.html, fastp.json
 
  ### Generating a index for the reference genome using the gtf file
   - Input resources_broad_hg38_v0_Homo_sapiens_assembly38.fasta, gencode_v39_annotation.gtf
