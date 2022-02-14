@@ -16,7 +16,8 @@ GTF file was downloaded from Gencode: https://ftp.ebi.ac.uk/pub/databases/gencod
  
  # Workflow
  ![Workflow](https://user-images.githubusercontent.com/26681884/153778754-a7d5fcd5-69f2-4ac5-8fa2-b0cc76198775.jpg) 
- [RNA variant calling steps and parameters - Sheet1.pdf](https://github.com/shaikhfarheen03/Varaint-Calling-in-RNA-seq-data-NA12878-/files/8056851/RNA.variant.calling.steps.and.parameters.-.Sheet1.pdf)
+<img width="495" alt="Options used" src="https://user-images.githubusercontent.com/26681884/153799087-4527396f-eba0-408b-8456-d8b4372abe3e.png">
+
 
  ## Running fastp for quality check and to trim adapters 
 Input 
