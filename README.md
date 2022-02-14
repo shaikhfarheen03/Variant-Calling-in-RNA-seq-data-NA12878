@@ -46,7 +46,7 @@ STAR --runThreadN 6 --runMode genomeGenerate --genomeDir reference_genome_hg38_i
 Output 
 >genome Dir 
 
- ## Mapping the fastq files to the trimmed reference genome
+ ## Mapping the fastq files using STAR two pass
 Input 
 >genomeDir, \
 >SRR5665260_1.fastp.fastq, \
